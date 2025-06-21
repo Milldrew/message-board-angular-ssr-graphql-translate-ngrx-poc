@@ -1,0 +1,7 @@
+<h1>Message Board</h1>
+@if (coreService.username) {
+  <app-message-board></app-message-board>
+} @else {
+  <p>Please choose a username to continue.</p>
+  <mat-form-field></mat-form-field>
+}
