@@ -5,16 +5,13 @@ import { CoreService } from '../core.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
+//skip hydration import
+//
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    MessageBoardComponent,
-    MatInputModule,
-    FormsModule,
-    MatFormFieldModule,
-  ],
+  imports: [MessageBoardComponent, FormsModule, MatButtonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

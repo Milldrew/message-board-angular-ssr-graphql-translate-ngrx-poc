@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  max-width: 90%;
+}
+
+.message-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+div.message-text {
+  padding-left: 10px;
+}

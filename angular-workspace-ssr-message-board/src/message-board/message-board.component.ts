@@ -6,5 +6,8 @@ import { MessageComponent } from './message/message.component';
   imports: [MessageComponent],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss',
+  // host: {
+  //   // ngSkipHydration: 'true',
+  // },
 })
 export class MessageBoardComponent {}
