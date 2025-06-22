@@ -7,6 +7,56 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { Message } from './message-board/message-board.types';
+import { MOCK_MESSAGES } from './message-board/message-board.constants';
+
+const messages: Message[] = MOCK_MESSAGES;
+const typeDefs = `#graphql
+  type Query {
+    hello: String
+    messages: [Message]
+  }
+  type Message {
+    messageId: ID!
+    message: String!
+    username: String!
+    createdAt: String!
+  }
+  type Mutation {
+    addMessage(message: String!, username: String!): Message!
+  }
+`;
+const resolvers = {
+  Query: {
+    hello: () => 'Hello from Apollo Server!',
+  },
+  Mutation: {
+    addMessage: (
+      _: any,
+      { message, username }: { message: string; username: string },
+    ) => {
+      const newMessage: Message = {
+        messageId: String(Date.now()) + '-' + (Math.random() * 1000).toFixed(0),
+        message,
+        username,
+        createdAt: Date.now(),
+      };
+      messages.push(newMessage);
+      return newMessage;
+    },
+  },
+};
+
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+(async () => {
+  await apolloServer.start();
+})();
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -25,6 +75,9 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+app.get('/api/**', (req, res) => {
+  res.json({ message: 'This is an example API response' });
+});
 
 /**
  * Serve static files from /browser

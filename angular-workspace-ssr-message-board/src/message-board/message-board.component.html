@@ -1,1 +1,13 @@
-<app-message []></app-message>
+<div id="scrollable">
+@for (message of messageBoardService.messages; track message.messageId) {
+  <mat-card>
+    <app-message [messageInputObject]="message"></app-message>
+  </mat-card>
+}
+ <div id="spacer"> </div>
+</div>
+
+<div id="message-input-container">
+<textarea matInput placeholder="Enter your message here"></textarea>
+<button mat-flat-button color="accent" >Send</button>
+</div>

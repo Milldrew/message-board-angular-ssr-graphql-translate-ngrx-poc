@@ -4,10 +4,14 @@
 }
 
 .message-container {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
 }
 
 div.message-text {
-  padding-left: 10px;
+}
+
+div.message-username {
+  min-width: 100px;
+  width: 100px;
+  max-width: 100px;
 }
