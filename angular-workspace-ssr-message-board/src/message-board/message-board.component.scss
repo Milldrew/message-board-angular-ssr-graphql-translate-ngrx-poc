@@ -27,6 +27,7 @@ textarea {
   box-sizing: border-box;
   border-radius: 20px;
   padding: 10px;
+  font-size: 16px;
 }
 
 button {
@@ -45,4 +46,8 @@ button {
   width: 100%;
   z-index: 100;
   background-color: white;
+}
+
+label {
+  font-size: 10px;
 }

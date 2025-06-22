@@ -1,14 +1,16 @@
 <h1>Message Board</h1>
 @if (coreService.savedUsername) {
- <h3>Welcome! {{coreService.savedUsername}}</h3>
+  <h3>Welcome! {{ coreService.savedUsername }}</h3>
   <app-message-board></app-message-board>
 } @else {
   <p>Please choose a username to continue.</p>
-  <input type="text" placeholder="Enter your username" [(ngModel)]="coreService.usernameInputBinding"
-  (keyup.enter)="coreService.saveUsername()"
+  <input
+    type="text"
+    placeholder="Enter your username"
+    [(ngModel)]="coreService.usernameInputBinding"
+    (keyup.enter)="coreService.saveUsername()"
   />
-   <button
-mat-button
-color="primary"
-   (click)="coreService.saveUsername()">Save</button>
+  <button mat-button color="primary" (click)="coreService.saveUsername()">
+    Save
+  </button>
 }

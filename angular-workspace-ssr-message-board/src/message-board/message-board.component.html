@@ -1,13 +1,25 @@
 <div id="scrollable">
-@for (message of messageBoardService.messages; track message.messageId) {
-  <mat-card>
-    <app-message [messageInputObject]="message"></app-message>
-  </mat-card>
-}
- <div id="spacer"> </div>
+  @for (message of messageBoardService.messages; track message.messageId) {
+    <mat-card>
+      <app-message [messageInputObject]="message"></app-message>
+    </mat-card>
+    <label>
+      {{ message.createdAt | date: "medium" }}
+    </label>
+  }
+  <div id="spacer"></div>
 </div>
 
 <div id="message-input-container">
-<textarea matInput placeholder="Enter your message here"></textarea>
-<button mat-flat-button color="accent" >Send</button>
+  <textarea
+    [(ngModel)]="messageBoardService.messageTextAreaText"
+    placeholder="Enter your message here"
+  ></textarea>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="messageBoardService.addMessage(); scrollToTopOfMessages()"
+  >
+    Send
+  </button>
 </div>

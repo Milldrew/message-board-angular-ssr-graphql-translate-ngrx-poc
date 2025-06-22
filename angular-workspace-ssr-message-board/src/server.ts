@@ -5,14 +5,19 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import * as fse from 'fs-extra';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { createServer } from 'node:http';
+import cors from 'cors';
 import { Message } from './message-board/message-board.types';
 import { MOCK_MESSAGES } from './message-board/message-board.constants';
 
-const messages: Message[] = MOCK_MESSAGES;
+const messages: Message[] = [...MOCK_MESSAGES]; // Create a copy to avoid mutating the original
+
 const typeDefs = `#graphql
   type Query {
     hello: String
@@ -28,9 +33,11 @@ const typeDefs = `#graphql
     addMessage(message: String!, username: String!): Message!
   }
 `;
+
 const resolvers = {
   Query: {
     hello: () => 'Hello from Apollo Server!',
+    messages: () => messages,
   },
   Mutation: {
     addMessage: (
@@ -49,58 +56,81 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
-
-(async () => {
-  await apolloServer.start();
-})();
-
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
-const app = express();
-const angularApp = new AngularNodeAppEngine();
+async function createApp() {
+  const app = express();
+  const httpServer = createServer(app);
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-app.get('/api/**', (req, res) => {
-  res.json({ message: 'This is an example API response' });
-});
+  // Create Apollo Server with proper shutdown handling
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
+  // Start Apollo Server
+  await apolloServer.start();
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
-app.use('/**', (req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
-});
+  const angularApp = new AngularNodeAppEngine();
+
+  // Add JSON parsing middleware
+  app.use(express.json());
+
+  // Apollo GraphQL endpoint
+  app.use(
+    '/api/graphql',
+    cors({
+      origin:
+        process.env['NODE_ENV'] === 'production'
+          ? ['your-production-domain.com']
+          : ['http://localhost:4200', 'http://localhost:4000'],
+      credentials: true,
+    }),
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => ({
+        // Add any context you need (auth, user info, etc.)
+        headers: req.headers,
+      }),
+    }),
+  );
+
+  // Remove the catch-all API route that was conflicting
+  // app.get('/api/**', (req, res) => {
+  //   res.json({ message: 'This is an example API response' });
+  // });
+
+  // Add specific REST API endpoints if needed
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'OK', message: 'Server is running!' });
+  });
+
+  /**
+   * Serve static files from /browser
+   */
+  app.use(
+    express.static(browserDistFolder, {
+      maxAge: '1y',
+      index: false,
+      redirect: false,
+    }),
+  );
+
+  /**
+   * Handle all other requests by rendering the Angular application.
+   */
+  app.use('/**', (req, res, next) => {
+    angularApp
+      .handle(req)
+      .then((response) =>
+        response ? writeResponseToNodeResponse(response, res) : next(),
+      )
+      .catch(next);
+  });
+
+  return { app, httpServer };
+}
 
 /**
  * Start the server if this module is the main entry point.
@@ -108,12 +138,26 @@ app.use('/**', (req, res, next) => {
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+
+  createApp()
+    .then(({ app, httpServer }) => {
+      httpServer.listen(port, () => {
+        console.log(
+          `Node Express server listening on http://localhost:${port}`,
+        );
+        console.log(
+          `GraphQL endpoint available at http://localhost:${port}/api/graphql`,
+        );
+      });
+    })
+    .catch((error) => {
+      console.error('Error starting server:', error);
+    });
 }
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */
-export const reqHandler = createNodeRequestHandler(app);
+export const reqHandler = createNodeRequestHandler(
+  await createApp().then(({ app }) => app),
+);

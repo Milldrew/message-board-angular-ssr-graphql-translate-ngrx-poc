@@ -4,13 +4,28 @@ import { MessageBoardService } from './message-board.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-message-board',
-  imports: [MessageComponent, MatCardModule, MatInputModule, MatButtonModule],
+  imports: [
+    DatePipe,
+    MessageComponent,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    FormsModule,
+  ],
   templateUrl: './message-board.component.html',
   styleUrl: './message-board.component.scss',
 })
 export class MessageBoardComponent {
   constructor(public messageBoardService: MessageBoardService) {}
+  scrollToTopOfMessages() {
+    const scrollablePane = document.getElementById('scrollable');
+    if (scrollablePane) {
+      scrollablePane.scrollTop = 0;
+    }
+  }
 }
