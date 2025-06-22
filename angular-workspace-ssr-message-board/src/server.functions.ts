@@ -1,9 +1,7 @@
 import * as fse from 'fs-extra';
 import { Message } from './message-board/message-board.types';
-import { join } from 'node:path';
-import { MessagesData } from './graphql.service';
 
-const DATABASE_PATH = join(process.cwd(), 'message-board-database.json');
+const DATABASE_PATH = './database.json';
 
 function doesDatabaseExist(): boolean {
   return fse.existsSync(DATABASE_PATH);
@@ -11,31 +9,23 @@ function doesDatabaseExist(): boolean {
 
 export function createDatabase(): void {
   if (!doesDatabaseExist()) {
-    fse.writeFileSync(DATABASE_PATH, JSON.stringify([]));
+    fse.writeJSONSync(DATABASE_PATH, { messages: [] }, { spaces: 2 });
     console.log('Database created at', DATABASE_PATH);
   } else {
     console.log('Database already exists at', DATABASE_PATH);
   }
 }
 
-export function getMessages(): MessagesData {
+export function getMessages(): Message[] {
   if (doesDatabaseExist()) {
-    const messages = fse.readJSONSync(DATABASE_PATH);
-    console.log('---------------');
-    console.log(messages);
-    console.log('---------------');
-    return { messages } as MessagesData;
+    return fse.readJSONSync(DATABASE_PATH).messages;
   }
-  return { messages: [] };
+  return [];
 }
 
 export function addMessage(message: Message) {
+  const messages = getMessages();
+  messages.unshift(message);
   createDatabase(); //guard against missing database
-  const messageData = getMessages();
-  messageData.messages.unshift(message);
-  fse.writeJSONSync(
-    DATABASE_PATH,
-    { messages: messageData.messages },
-    { spaces: 2 },
-  );
+  fse.writeJSONSync(DATABASE_PATH, { messages }, { spaces: 2 });
 }

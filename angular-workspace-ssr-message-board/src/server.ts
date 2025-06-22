@@ -13,11 +13,10 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { createServer } from 'node:http';
 import cors from 'cors';
 import { Message } from './message-board/message-board.types';
-import { addMessage, createDatabase, getMessages } from './server.functions';
+import { createDatabase, getMessages } from './server.functions';
 
 createDatabase(); // Ensure the database is created at startup
-const messageData = getMessages();
-console.log(messageData);
+const messages = getMessages();
 
 const typeDefs = `#graphql
   type Query {
@@ -39,11 +38,7 @@ const resolvers = {
   Query: {
     hello: () => 'Hello from Apollo Server!',
     messages: () => {
-      const dto = getMessages();
-      console.log('----------------');
-      console.log(dto);
-      console.log('----------------');
-      return dto;
+      return getMessages();
     },
   },
   Mutation: {
@@ -57,8 +52,7 @@ const resolvers = {
         username,
         createdAt: Date.now(),
       };
-      messageData.messages.unshift(newMessage);
-      addMessage(newMessage); // Save the new message to the database
+      messages.unshift(newMessage);
       return newMessage;
     },
   },
