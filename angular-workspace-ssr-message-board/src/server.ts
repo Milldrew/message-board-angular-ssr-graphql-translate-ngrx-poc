@@ -5,7 +5,6 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import * as fse from 'fs-extra';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ApolloServer } from '@apollo/server';
@@ -14,9 +13,10 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { createServer } from 'node:http';
 import cors from 'cors';
 import { Message } from './message-board/message-board.types';
-import { MOCK_MESSAGES } from './message-board/message-board.constants';
+import { createDatabase, getMessages } from './server.functions';
 
-const messages: Message[] = [...MOCK_MESSAGES]; // Create a copy to avoid mutating the original
+createDatabase(); // Ensure the database is created at startup
+const messages = getMessages();
 
 const typeDefs = `#graphql
   type Query {
@@ -37,7 +37,9 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     hello: () => 'Hello from Apollo Server!',
-    messages: () => messages,
+    messages: () => {
+      return getMessages();
+    },
   },
   Mutation: {
     addMessage: (

@@ -1,11 +1,13 @@
 <div id="scrollable">
-  @for (message of messageBoardService.messages; track message.messageId) {
-    <mat-card>
-      <app-message [messageInputObject]="message"></app-message>
-    </mat-card>
-    <label>
-      {{ message.createdAt | date: "medium" }}
-    </label>
+  @if (messageBoardService.messages.length) {
+    @for (message of messageBoardService.messages; track message.messageId) {
+      <mat-card>
+        <app-message [messageInputObject]="message"></app-message>
+      </mat-card>
+      <label>
+        {{ message.createdAt | date: "medium" }}
+      </label>
+    }
   }
   <div id="spacer"></div>
 </div>
@@ -14,6 +16,7 @@
   <textarea
     [(ngModel)]="messageBoardService.messageTextAreaText"
     placeholder="Enter your message here"
+    (keydown.enter)="messageBoardService.addMessage(); scrollToTopOfMessages()"
   ></textarea>
   <button
     mat-flat-button

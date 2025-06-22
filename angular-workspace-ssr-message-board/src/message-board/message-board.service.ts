@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { MOCK_MESSAGES } from './message-board.constants';
 import { GraphqlService } from '../graphql.service';
 import { CoreService } from '../core.service';
 import { Message } from './message-board.types';
@@ -12,7 +11,7 @@ export class MessageBoardService {
     private graphqlService: GraphqlService,
     private coreService: CoreService,
   ) {}
-  messages = MOCK_MESSAGES;
+  messages: Message[] = [];
   messageTextAreaText = '';
 
   sendMessageToServer(message: string): void {}
@@ -33,6 +32,7 @@ export class MessageBoardService {
     console.log('addMessage payload', payload);
     if (payload?.addMessage) {
       this.messages.unshift(payload.addMessage);
+      this.messageTextAreaText = '';
     } else {
       throw new Error('Failed to add message');
     }
