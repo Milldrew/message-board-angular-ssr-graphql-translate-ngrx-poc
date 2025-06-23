@@ -22,6 +22,7 @@
     (keydown.enter)="messageBoardService.addMessage(); scrollToTopOfMessages()"
   ></textarea>
   <button
+    id="send-button"
     mat-flat-button
     color="accent"
     (click)="messageBoardService.addMessage(); scrollToTopOfMessages()"

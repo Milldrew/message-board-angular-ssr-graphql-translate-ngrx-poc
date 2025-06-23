@@ -1,6 +1,30 @@
 {
   "messages": [
     {
+      "messageId": "1750651130117-305",
+      "message": "I am entering a message",
+      "username": "asdfsdf",
+      "createdAt": 1750651130117
+    },
+    {
+      "messageId": "1750650933997-181",
+      "message": "What's going on",
+      "username": "asdfasdf",
+      "createdAt": 1750650933997
+    },
+    {
+      "messageId": "1750650925511-553",
+      "message": "Whats up with it",
+      "username": "asdfasdf",
+      "createdAt": 1750650925511
+    },
+    {
+      "messageId": "1750650606519-658",
+      "message": "This is proof of concept for an angular ssr graphql translate app. You can press the Expanol button in the upper right to change the language to Spanish. One thing I didn't do was setup ngrx, seemed kind of excessive for such a small app. Thanks for checking out my app! https://github.com/Milldrew/message-board-angular-ssr-graphql-translate-ngrx-poc",
+      "username": "This is proof of concept for an angular ssr graphql translate app. You can press the Expanol button in the upper right to change the language to Spanish. One thing I didn't do was setup ngrx, seemed kind of excessive for such a small app. Thanks for checking out my app! https://github.com/Milldrew/message-board-angular-ssr-graphql-translate-ngrx-poc",
+      "createdAt": 1750650606519
+    },
+    {
       "messageId": "1750649125250-775",
       "message": "Hola",
       "username": "Andrew",

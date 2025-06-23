@@ -1,3 +1,4 @@
+$textarea-height: 40px;
 :host {
   display: flex;
   min-width: 300px;
@@ -23,18 +24,20 @@ textarea {
   position: absolute;
   bottom: 0;
   width: 70%;
-  min-height: 100px;
+  min-height: $textarea-height;
+  height: $textarea-height;
   box-sizing: border-box;
   border-radius: 20px;
   padding: 10px;
   font-size: 16px;
 }
 
-button {
+button#send-button {
   position: absolute;
   bottom: 0;
   right: 0;
-  min-height: 100px;
+  height: $textarea-height;
+  min-height: $textarea-height;
   width: 30%;
   box-sizing: border-box;
 }
@@ -42,7 +45,7 @@ button {
 #message-input-container {
   position: absolute;
   bottom: 0;
-  height: 110px;
+  height: $textarea-height + 20px;
   width: 100%;
   z-index: 100;
   background-color: white;
