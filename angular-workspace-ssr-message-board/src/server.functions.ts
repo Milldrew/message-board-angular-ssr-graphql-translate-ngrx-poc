@@ -1,7 +1,8 @@
 import * as fse from 'fs-extra';
 import { Message } from './message-board/message-board.types';
+import { join } from 'path';
 
-const DATABASE_PATH = './database.json';
+const DATABASE_PATH = join(process.cwd(), './database.json');
 
 function doesDatabaseExist(): boolean {
   return fse.existsSync(DATABASE_PATH);
@@ -10,7 +11,6 @@ function doesDatabaseExist(): boolean {
 export function createDatabase(): void {
   if (!doesDatabaseExist()) {
     fse.writeJSONSync(DATABASE_PATH, { messages: [] }, { spaces: 2 });
-    console.log('Database created at', DATABASE_PATH);
   } else {
     console.log('Database already exists at', DATABASE_PATH);
   }

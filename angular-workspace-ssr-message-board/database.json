@@ -1,3 +1,58 @@
 {
-  "messages": []
+  "messages": [
+    {
+      "messageId": "1750649125250-775",
+      "message": "Hola",
+      "username": "Andrew",
+      "createdAt": 1750649125250
+    },
+    {
+      "messageId": "1750648475201-468",
+      "message": "Hello world",
+      "username": "Guest",
+      "createdAt": 1750648475201
+    },
+    {
+      "messageId": "1750646246168-433",
+      "message": "1234",
+      "username": "Guest",
+      "createdAt": 1750646246168
+    },
+    {
+      "messageId": "1750646240335-984",
+      "message": "431=21",
+      "username": "Guest",
+      "createdAt": 1750646240335
+    },
+    {
+      "messageId": "1750646232037-594",
+      "message": "sdfsadf",
+      "username": "Guest",
+      "createdAt": 1750646232037
+    },
+    {
+      "messageId": "1750646227201-804",
+      "message": "sadfsdfasdf",
+      "username": "Guest",
+      "createdAt": 1750646227201
+    },
+    {
+      "messageId": "1750646225305-783",
+      "message": "sadfsdfas",
+      "username": "Guest",
+      "createdAt": 1750646225305
+    },
+    {
+      "messageId": "1750646152599-11",
+      "message": "234234",
+      "username": "Guest",
+      "createdAt": 1750646152599
+    },
+    {
+      "messageId": "1750646147938-108",
+      "message": "234234",
+      "username": "Guest",
+      "createdAt": 1750646147938
+    }
+  ]
 }

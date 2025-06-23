@@ -13,7 +13,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { createServer } from 'node:http';
 import cors from 'cors';
 import { Message } from './message-board/message-board.types';
-import { createDatabase, getMessages } from './server.functions';
+import { addMessage, createDatabase, getMessages } from './server.functions';
 
 createDatabase(); // Ensure the database is created at startup
 const messages = getMessages();
@@ -53,6 +53,7 @@ const resolvers = {
         createdAt: Date.now(),
       };
       messages.unshift(newMessage);
+      addMessage(newMessage); // Save to database
       return newMessage;
     },
   },

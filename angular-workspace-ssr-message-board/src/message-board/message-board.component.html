@@ -18,12 +18,14 @@
   <textarea
     [(ngModel)]="messageBoardService.messageTextAreaText"
     placeholder="Enter your message here"
+    i18n-placeholder="@@message.placeholder"
     (keydown.enter)="messageBoardService.addMessage(); scrollToTopOfMessages()"
   ></textarea>
   <button
     mat-flat-button
     color="accent"
     (click)="messageBoardService.addMessage(); scrollToTopOfMessages()"
+    i18n
   >
     Send
   </button>

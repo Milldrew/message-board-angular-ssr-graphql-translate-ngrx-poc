@@ -24,12 +24,10 @@ export class MessageBoardService {
     }
   }
   async addMessage() {
-    console.log('adding message');
     const payload = await this.graphqlService.addMessage(
       this.messageTextAreaText,
       this.coreService.savedUsername,
     );
-    console.log('addMessage payload', payload);
     if (payload?.addMessage) {
       this.messages.unshift(payload.addMessage);
       this.messageTextAreaText = '';
@@ -39,7 +37,7 @@ export class MessageBoardService {
   }
   setMessages(messages: Message[]) {
     this.messages = messages.sort((a, b) => {
-      return a.createdAt - b.createdAt;
+      return b.createdAt - a.createdAt;
     });
   }
 }
