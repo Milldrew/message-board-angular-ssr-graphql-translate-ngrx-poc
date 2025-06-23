@@ -5,7 +5,9 @@
         <app-message [messageInputObject]="message"></app-message>
       </mat-card>
       <label>
-        {{ message.createdAt | date: "medium" }}
+        {{
+          message.createdAt | date: "medium" : "" : coreService.currentLocale
+        }}
       </label>
     }
   }

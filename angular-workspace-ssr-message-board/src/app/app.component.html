@@ -1,4 +1,14 @@
-<h1>Message Board</h1>
+@if (coreService.currentLocale === "en-US") {
+  <a href="../es-MX">
+    <button id="language-toggle" mat-button>Español</button>
+  </a>
+} @else {
+  <a href="../en-US">
+    <button id="language-toggle" mat-button>English</button>
+  </a>
+}
+
+<h1 i18n>Message Board</h1>
 @if (coreService.savedUsername) {
   <h3>Welcome! {{ coreService.savedUsername }}</h3>
   <app-message-board></app-message-board>

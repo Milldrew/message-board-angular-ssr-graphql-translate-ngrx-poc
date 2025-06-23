@@ -14,7 +14,7 @@ interface GraphQLResponse<T> {
     path?: string[];
   }>;
 }
-interface MessagesData {
+export interface MessagesData {
   messages: Message[];
 }
 interface AddMessageData {
@@ -45,6 +45,7 @@ export class GraphqlService {
       .post<GraphQLResponse<T>>(this.graphqlEndpoint, body, this.httpOptions)
       .pipe(
         map((response) => {
+          console.log(response.data);
           if (response.errors && response.errors.length > 0) {
             throw new Error(response.errors[0].message);
           }
