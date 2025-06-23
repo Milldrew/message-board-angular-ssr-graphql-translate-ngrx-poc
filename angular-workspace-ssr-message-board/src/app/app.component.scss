@@ -8,6 +8,11 @@
   max-width: 800px;
   contain: content;
 }
+@media (max-width: 800px) {
+  :host {
+    max-width: 89vw;
+  }
+}
 h1 {
   text-align: center;
 }

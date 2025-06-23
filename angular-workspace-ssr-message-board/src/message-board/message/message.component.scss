@@ -8,9 +8,11 @@
 }
 
 div.message-text {
+  word-break: break-all;
 }
 
 div.message-username {
+  word-break: break-all;
   min-width: 100px;
   width: 100px;
   max-width: 100px;
