@@ -17,3 +17,37 @@ div.message-username {
   width: 100px;
   max-width: 100px;
 }
+
+div.message-text,
+div.message-username {
+  letter-spacing: 0.7px;
+  line-height: 1.5;
+}
+#spacer {
+  width: 40px;
+}
+
+@media (max-width: 800px) {
+  :host {
+
+    .message-container {
+      flex-direction: column;
+      space-between: 0.5rem;
+    }
+    #spacer {
+      height: 10px;
+      width: 100%;
+    }
+    div.message-username {
+      width: fit-content;
+      max-width: 100%
+    }
+  }
+}
+
+div.message-username {
+  padding: 4px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  word-break: break-word;
+}
