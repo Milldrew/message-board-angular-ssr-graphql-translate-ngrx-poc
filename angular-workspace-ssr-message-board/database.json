@@ -1,6 +1,12 @@
 {
   "messages": [
     {
+      "messageId": "1750651467617-462",
+      "message": "",
+      "username": "asdf",
+      "createdAt": 1750651467617
+    },
+    {
       "messageId": "1750651130117-305",
       "message": "I am entering a message",
       "username": "asdfsdf",
