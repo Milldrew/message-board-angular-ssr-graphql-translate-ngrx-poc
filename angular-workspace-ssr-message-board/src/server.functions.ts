@@ -23,8 +23,11 @@ export function getMessages(): Message[] {
   return [];
 }
 
+/** The newest 200 messages are kept; the file used to grow without limit. */
+const MAX_MESSAGES = 200;
+
 export function addMessage(message: Message) {
-  const messages = getMessages();
+  const messages = getMessages().slice(0, MAX_MESSAGES - 1);
   messages.unshift(message);
   createDatabase(); //guard against missing database
   fse.writeJSONSync(DATABASE_PATH, { messages }, { spaces: 2 });

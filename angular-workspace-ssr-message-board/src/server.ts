@@ -8,6 +8,7 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ApolloServer } from '@apollo/server';
+import { GraphQLError } from 'graphql';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { createServer } from 'node:http';
@@ -16,7 +17,7 @@ import { Message } from './message-board/message-board.types';
 import { addMessage, createDatabase, getMessages } from './server.functions';
 
 createDatabase(); // Ensure the database is created at startup
-const messages = getMessages();
+// (Messages are read from the file on every query; no in-memory copy.)
 
 const typeDefs = `#graphql
   type Query {
@@ -46,13 +47,21 @@ const resolvers = {
       _: any,
       { message, username }: { message: string; username: string },
     ) => {
+      // A public board: trim, cap and refuse empties (anything else used to
+      // be stored as sent, at any length).
+      const text = String(message ?? '').trim().slice(0, 280);
+      const name = String(username ?? '').trim().slice(0, 24);
+      if (!text || !name) {
+        throw new GraphQLError('A message and a username are required', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        });
+      }
       const newMessage: Message = {
         messageId: String(Date.now()) + '-' + (Math.random() * 1000).toFixed(0),
-        message,
-        username,
+        message: text,
+        username: name,
         createdAt: Date.now(),
       };
-      messages.unshift(newMessage);
       addMessage(newMessage); // Save to database
       return newMessage;
     },
