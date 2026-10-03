@@ -24,6 +24,8 @@ export class MessageBoardService {
     }
   }
   async addMessage() {
+    // Nothing to send: don't ask the server (it refuses empty messages).
+    if (!this.messageTextAreaText.trim()) return;
     const payload = await this.graphqlService.addMessage(
       this.messageTextAreaText,
       this.coreService.savedUsername,

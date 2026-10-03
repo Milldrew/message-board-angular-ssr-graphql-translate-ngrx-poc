@@ -16,7 +16,8 @@
   <p i18n>Please choose a username to continue.</p>
   <input
     type="text"
-    laceholder="Enter your username"
+    placeholder="Enter your username"
+    maxlength="24"
     i18n-placeholder="@@username-placeholder"
     [(ngModel)]="coreService.usernameInputBinding"
     (keyup.enter)="coreService.saveUsername()"
